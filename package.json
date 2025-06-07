@@ -19,6 +19,8 @@
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.12.3",
     "@react-pdf/renderer": "^4.3.0",
+    "@tensorflow-models/body-pix": "^2.2.1",
+    "@tensorflow/tfjs": "^4.22.0",
     "AsyncStorage": "^0.1.5",
     "axios": "^1.9.0",
     "body-parser": "^1.20.3",

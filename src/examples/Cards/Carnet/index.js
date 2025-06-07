@@ -62,7 +62,7 @@ function Carnet({ color, number, holder, expires }) {
   }, []);
 
   useEffect(() => {
-    console.log("Ref actual:", componentRef.current);
+    // console.log("Ref actual:", componentRef.current);
   }, [empleado, foto]);
 
   // Activar la cámara
@@ -193,11 +193,11 @@ function Carnet({ color, number, holder, expires }) {
   const buscarEmpleado = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5001/empleado/${ced}`);
-      console.log(response.data);
+      const response = await axios.get(`http://10.16.9.24:5001/empleado/${ced}`);
+      // console.log(response.data);
       setEmpleado(response.data);
       const codeSinCeros = Number(response.data.ofiuniadm);
-      console.log(codeSinCeros);
+      // console.log(codeSinCeros);
       setError("");
       await buscarColor(codeSinCeros);
     } catch (err) {
@@ -207,10 +207,10 @@ function Carnet({ color, number, holder, expires }) {
   };
 
   const buscarColor = async (ofiuniadm) => {
-    console.log(ofiuniadm);
+    // console.log(ofiuniadm);
     try {
-      const response = await axios.get(`http://localhost:5002/api/color_ger/${ofiuniadm}`);
-      console.log(response.data);
+      const response = await axios.get(`http://10.16.9.24:5002/api/color_ger/${ofiuniadm}`);
+      // console.log(response.data);
       if (response.data && response.data.color) {
         setColor(response.data);
       }
@@ -407,7 +407,7 @@ function Carnet({ color, number, holder, expires }) {
         <MDBox display="flex" justifyContent="center" alignItems="center">
           <CarnetImprimible
             empleado={empleado}
-            foto={processedFoto || foto || people}
+            foto={processedFoto || people}
             colorger={colorger}
           />
         </MDBox>

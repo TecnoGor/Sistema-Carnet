@@ -29,17 +29,17 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-app.get('/api/color_ger/:ufiuniadm', async (req, res) => {
+app.get('/api/color_ger/:ofiuniadm', async (req, res) => {
   const { ofiuniadm } = req.params;
   try {
-    console.log(`Consultando codger: ${ofiuniadm}`); // Log para depuración
+    // console.log(`Consultando codger: ${ofiuniadm}`); // Log para depuración
     
     const result = await pool.query(
       'SELECT codger, color FROM gerencia_color WHERE codger = $1', 
       [ofiuniadm]
     );
     
-    console.log(`Resultados encontrados: ${result.rows.length}`); // Log para depuración
+    // console.log(`Resultados encontrados: ${result.rows.length}`); // Log para depuración
     
     if (result.rows.length > 0) {
       res.json(result.rows[0]);

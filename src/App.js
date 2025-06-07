@@ -4,6 +4,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
+import CircularProgress from "@mui/material/CircularProgress";
 import MDBox from "components/MDBox";
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
@@ -52,6 +53,38 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const ced = queryParams.get("ced");
+
+    if (ced) {
+      verificarEmpleado(ced);
+    }
+  }, [location.search]);
+
+  const verificarEmpleado = async (cedula) => {
+    try {
+      const response = await fetch(`http://10.16.9.24:5001/empleado/${cedula}`);
+
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+
+      const data = await response.json();
+
+      // Verifica si se encontraron datos del empleado
+      if (data && data.cedper) {
+        alert(`Trabajador ACTIVO\nNombre: ${data.nomper} ${data.apeper}\nCédula: ${data.cedper}`);
+      } else {
+        alert("Trabajador no encontrado o INACTIVO");
+      }
+    } catch (error) {
+      console.error("Error al verificar:", error);
+      alert("Error al verificar el trabajador");
+    }
+  };
 
   // Cache for the rtl
   useMemo(() => {
@@ -93,7 +126,7 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
+  const getRoutes = (allRoutes) => [
     allRoutes.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
@@ -113,7 +146,32 @@ export default function App() {
       }
 
       return null;
-    });
+    }),
+    <Route path="/verificar-empleado" element={<VerificarEmpleado />} key="verificar-empleado" />,
+  ];
+
+  function VerificarEmpleado() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const queryParams = new URLSearchParams(location.search);
+      const ced = queryParams.get("ced");
+
+      if (ced) {
+        // Realizar la verificación aquí o redirigir a la página principal
+        navigate("/", { state: { cedula: ced } });
+      } else {
+        navigate("/");
+      }
+    }, [location, navigate]);
+
+    return (
+      <MDBox display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress color="info" />
+      </MDBox>
+    );
+  }
 
   const configsButton = (
     <MDBox

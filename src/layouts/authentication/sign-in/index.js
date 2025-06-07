@@ -58,7 +58,7 @@ function Basic() {
     try {
       // Llamada a tu API de login
       const response = await axios.post(
-        "http://localhost:5000/login",
+        "http://10.16.9.24:5000/login",
         {
           username,
           password,
