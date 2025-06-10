@@ -1,5 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
+const multer = require('multer');
+const path = require('path');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -71,6 +73,29 @@ app.post('/api/users', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(501).send('Error al obtener los datos');
+    }
+});
+
+// Ruta para guardar las fotos
+app.post('/api/guardar-foto', async (req, res) => {
+    const { cedula, foto } = req.body;
+
+    if (!foto || !cedula) {
+        return res.status(400).json({ error: 'Datos incompletos' });
+    }
+
+    try {
+        const query = `
+            INSERT INTO personal(codpersonal, foto)
+            VALUES ($1, $2)
+            ON CONFLICT (codpersonal)
+            DO UPDATE SET foto = EXCLUDED.foto;
+        `;
+        await pool.query(query, [cedula, foto]);
+        res.status[200].json({ message: 'Foto guardada con éxito' });
+    } catch (error) {
+        console.error("Error al guardar la foto: ", error);
+        res.status[500].json({ error: "Error al intentar guardar la foto" });
     }
 });
 

@@ -128,8 +128,8 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
               alt="people"
               style={{
                 width: "2.7cm",
-                height: "3cm",
-                marginTop: -40,
+                height: "2.7cm",
+                marginTop: -30,
                 marginLeft: 77,
                 padding: 10,
                 borderRadius: 2,

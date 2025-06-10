@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import * as bodyPix from "@tensorflow-models/body-pix";
+import * as tf from "@tensorflow/tfjs";
 // import { PDFDownloadLink } from "@react-pdf/renderer";
 // import BlobStream from "blob-stream";
 import PropTypes from "prop-types";
@@ -164,32 +166,32 @@ function Carnet({ color, number, holder, expires }) {
 
   // Guardar foto en la base de datos
   const guardarFoto = async () => {
-    if (!foto) {
-      alert("No hay foto para guardar");
+    if (!processedFoto || !empleado?.cedper) {
+      alert("No hay foto procesada o cédula del empleado");
       return;
     }
 
-    try {
-      // Aquí debes implementar la llamada a tu API para guardar en la base de datos
-      const respuesta = await fetch("/api/guardar-foto", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imagen: foto }),
-      });
+    console.log(processedFoto, empleado.cedper);
 
-      if (respuesta.ok) {
-        alert("Foto guardada exitosamente");
-        setFoto(null);
-      } else {
-        throw new Error("Error al guardar la foto");
-      }
+    try {
+      const response = await axios.post(
+        "http://10.16.9.24:5000/api/guardar-foto",
+        {
+          cedula: empleado.cedper, // Usamos la cédula del empleado ya cargado
+          foto: processedFoto, // Base64 de la imagen procesada
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      alert(response.data.mensaje);
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error al guardar la foto");
+      console.error("Error al guardar la foto:", error);
+      alert("Error al subir la foto");
     }
   };
+
   const buscarEmpleado = async () => {
     setLoading(true);
     try {
