@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+// const { default: data } = require('layouts/tables/data/authorsTableData');
 
 const app = express();
 const port = 5000;
@@ -14,6 +15,8 @@ const SECRET_KEY = 'MAMALO';
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 const pool = new Pool({
     user: 'postgres',
@@ -78,24 +81,37 @@ app.post('/api/users', async (req, res) => {
 
 // Ruta para guardar las fotos
 app.post('/api/guardar-foto', async (req, res) => {
-    const { cedula, foto } = req.body;
-
-    if (!foto || !cedula) {
-        return res.status(400).json({ error: 'Datos incompletos' });
-    }
-
     try {
-        const query = `
-            INSERT INTO personal(codpersonal, foto)
-            VALUES ($1, $2)
-            ON CONFLICT (codpersonal)
-            DO UPDATE SET foto = EXCLUDED.foto;
-        `;
-        await pool.query(query, [cedula, foto]);
-        res.status[200].json({ message: 'Foto guardada con éxito' });
+        const { cedula, foto } = req.body;
+
+        if (!cedula || !foto) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'Cédula y foto son requeridos' 
+            });
+        }
+
+        const result = await pool.query(
+            `INSERT INTO personal(codpersonal, foto)
+             VALUES ($1, $2)
+             ON CONFLICT (codpersonal)
+             DO UPDATE SET foto = EXCLUDED.foto
+             RETURNING *`,
+            [cedula, foto]
+        );
+
+        return res.status(200).json({
+            success: true,
+            data: result.rows[0],
+            message: 'Foto guardada exitosamente'
+        });
+
     } catch (error) {
-        console.error("Error al guardar la foto: ", error);
-        res.status[500].json({ error: "Error al intentar guardar la foto" });
+        console.error('Error al guardar foto:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
     }
 });
 

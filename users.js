@@ -60,6 +60,38 @@ app.get('/api/color_ger/:ofiuniadm', async (req, res) => {
   }
 });
 
+app.get('/api/buscarFoto/:ced', async (req, res) => {
+  try {
+    // console.log(`Consultando codger: ${ofiuniadm}`); // Log para depuración
+    const { ced } = req.params;
+
+    const result = await pool.query(
+      'SELECT foto FROM personal WHERE codpersonal = $1', 
+      [ced]
+    );
+    
+    // console.log(`Resultados encontrados: ${result.rows.length}`); // Log para depuración
+    
+    if (result.rows.length > 0 && result.rows[0].foto) {
+      res.status(200).json({
+        success: true,
+        foto: result.rows[0].foto
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Foto no encontrada",
+      });
+    }
+  } catch (err) {
+    console.error('Error al buscar foto:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno al buscar la foto'
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

@@ -28,7 +28,7 @@ import logoHeader from "assets/images/carnetDesign/Logos_Ipostel-04.png";
 import logoHeader2 from "assets/images/carnetDesign/Logos_Ipostel-03.png";
 import banner from "assets/images/carnetDesign/CARNET-06.png";
 import bandera from "assets/images/carnetDesign/CARNET-03.png";
-import people from "assets/images/John_doe.jpg";
+import people from "assets/images/woman2.avif";
 import mesa from "assets/images/mesa.jpg";
 import masterCardLogo from "assets/images/logos/mastercard.png";
 import { border, borderRadius, fontSize, margin, padding, textAlign } from "@mui/system";
@@ -170,9 +170,7 @@ function Carnet({ color, number, holder, expires }) {
       alert("No hay foto procesada o cédula del empleado");
       return;
     }
-
     console.log(processedFoto, empleado.cedper);
-
     try {
       const response = await axios.post(
         "http://10.16.9.24:5000/api/guardar-foto",
@@ -185,10 +183,21 @@ function Carnet({ color, number, holder, expires }) {
         }
       );
 
-      alert(response.data.mensaje);
+      if (response.data.success) {
+        alert(response.data.message || "Foto guardada");
+      } else {
+        alert(`Error: ${response.data.message}` || "Error al guardar foto");
+      }
     } catch (error) {
       console.error("Error al guardar la foto:", error);
-      alert("Error al subir la foto");
+
+      let errorMessage = "Error al guardar la foto o conectar con el server";
+      if (error.response) {
+        errorMessage = error.response.data?.message || error.response.statusText;
+      } else if (error.request) {
+        errorMessage = "No se recibio respuesta del servidor";
+      }
+      alert(errorMessage);
     }
   };
 
@@ -201,6 +210,7 @@ function Carnet({ color, number, holder, expires }) {
       const codeSinCeros = Number(response.data.ofiuniadm);
       // console.log(codeSinCeros);
       setError("");
+      await buscarFoto(response.data.cedper);
       await buscarColor(codeSinCeros);
     } catch (err) {
       setEmpleado(null);
@@ -219,6 +229,26 @@ function Carnet({ color, number, holder, expires }) {
       setError("");
     } catch (err) {
       console.log("Color no encontrado.");
+    }
+  };
+
+  const buscarFoto = async () => {
+    try {
+      const response = await axios.get(`http://10.16.9.24:5002/api/buscarFoto/${ced}`);
+
+      if (response.data && response.data.foto) {
+        setFoto(response.data.foto);
+        setProcessedFoto(response.data.foto);
+      } else {
+        setFoto(people);
+        setProcessedFoto(people);
+      }
+      setError("");
+    } catch (err) {
+      console.error("Error al buscar la foto:", err);
+      // En caso de error, usamos la imagen por defecto
+      setFoto(people);
+      setProcessedFoto(people);
     }
   };
 
@@ -325,7 +355,7 @@ function Carnet({ color, number, holder, expires }) {
           )}
           {foto && !mostrarCamara && (
             <div className="foto-preview">
-              <img src={foto} alt="Foto tomada" className="imagen-preview" width="300px" />
+              {/* <img src={foto} alt="Foto tomada" className="imagen-preview" width="300px" /> */}
               {/* <div className="botones-accion">
                 <button onClick={guardarFoto} className="btn-guardar">
                   Guardar Foto
@@ -409,7 +439,7 @@ function Carnet({ color, number, holder, expires }) {
         <MDBox display="flex" justifyContent="center" alignItems="center">
           <CarnetImprimible
             empleado={empleado}
-            foto={processedFoto || people}
+            foto={processedFoto || foto || people}
             colorger={colorger}
           />
         </MDBox>
