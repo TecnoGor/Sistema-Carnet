@@ -234,7 +234,7 @@ function Carnet({ color, number, holder, expires }) {
 
   const buscarFoto = async () => {
     try {
-      const response = await axios.get(`http://10.16.9.24:5002/api/buscarFoto/${ced}`);
+      const response = await axios.get(`http://10.16.9.24:5000/api/buscarFoto/${ced}`);
 
       if (response.data && response.data.foto) {
         setFoto(response.data.foto);
