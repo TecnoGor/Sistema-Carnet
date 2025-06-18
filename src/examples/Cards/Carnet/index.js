@@ -29,6 +29,7 @@ import logoHeader2 from "assets/images/carnetDesign/Logos_Ipostel-03.png";
 import banner from "assets/images/carnetDesign/CARNET-06.png";
 import bandera from "assets/images/carnetDesign/CARNET-03.png";
 import people from "assets/images/woman2.avif";
+import fotoCarnet from "assets/images/fotoCarnet.png";
 import mesa from "assets/images/mesa.jpg";
 import masterCardLogo from "assets/images/logos/mastercard.png";
 import { border, borderRadius, fontSize, margin, padding, textAlign } from "@mui/system";
@@ -36,7 +37,7 @@ import MDInput from "components/MDInput";
 import { position } from "stylis";
 import { ConstructionOutlined } from "@mui/icons-material";
 
-function Carnet({ color, number, holder, expires }) {
+function Carnet() {
   const [ced, setCed] = useState("");
   const [ofiuniadm, setOfiUniAdm] = useState("");
   const [empleado, setEmpleado] = useState("");
@@ -240,15 +241,15 @@ function Carnet({ color, number, holder, expires }) {
         setFoto(response.data.foto);
         setProcessedFoto(response.data.foto);
       } else {
-        setFoto(people);
-        setProcessedFoto(people);
+        setFoto(fotoCarnet);
+        setProcessedFoto(fotoCarnet);
       }
       setError("");
     } catch (err) {
       console.error("Error al buscar la foto:", err);
       // En caso de error, usamos la imagen por defecto
-      setFoto(people);
-      setProcessedFoto(people);
+      setFoto(fotoCarnet);
+      setProcessedFoto(fotoCarnet);
     }
   };
 
@@ -266,13 +267,13 @@ function Carnet({ color, number, holder, expires }) {
     return nameAbreviated;
   };
 
-  const numbers = [...`${number}`];
+  // const numbers = [...`${number}`];
 
-  if (numbers.length < 16 || numbers.length > 16) {
-    throw new Error(
-      'Invalid value for the prop number, the value for the number prop shouldn"t be greater than or less than 16 digits'
-    );
-  }
+  // if (numbers.length < 16 || numbers.length > 16) {
+  //   throw new Error(
+  //     'Invalid value for the prop number, the value for the number prop shouldn"t be greater than or less than 16 digits'
+  //   );
+  // }
 
   const generatePDF = async () => {
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -439,7 +440,7 @@ function Carnet({ color, number, holder, expires }) {
         <MDBox display="flex" justifyContent="center" alignItems="center">
           <CarnetImprimible
             empleado={empleado}
-            foto={processedFoto || foto || people}
+            foto={processedFoto || foto || fotoCarnet}
             colorger={colorger}
           />
         </MDBox>
@@ -455,10 +456,10 @@ Carnet.defaultProps = {
 
 // Typechecking props for the MasterCard
 Carnet.propTypes = {
-  color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  number: PropTypes.number.isRequired,
-  holder: PropTypes.string.isRequired,
-  expires: PropTypes.string.isRequired,
+  // color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
+  // number: PropTypes.number.isRequired,
+  // holder: PropTypes.string.isRequired,
+  // expires: PropTypes.string.isRequired,
   empleado: PropTypes.shape({
     denger: PropTypes.string,
     nomper: PropTypes.string.isRequired,

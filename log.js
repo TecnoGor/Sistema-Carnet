@@ -31,6 +31,35 @@ function hashPassword(password) {
     return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+app.get('/verify-token', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return res.json({ valid: false });
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const user = await pool.query('SELECT * FROM users WHERE codper = $1', [decoded.userId]);
+        
+        if (user.rows.length === 0) return res.json({ valid: false });
+
+        res.json({ 
+            valid: true,
+            user: {
+                codper: user.rows[0].codper,
+                firstname: user.rows[0].firstname,
+                rol: user.rows[0].rol
+            }
+        });
+    } catch (err) {
+        res.json({ valid: false });
+    }
+});
+
+// Ruta para logout
+app.post('/logout', (req, res) => {
+    // Aquí podrías invalidar el token si usas una lista negra
+    res.json({ success: true });
+});
+
 // Ruta para registrar un nuevo usuario
 app.post('/register', async (req, res) => {
     const { firstname, secondname, ci, mail, phone, username, password, status, rol } = req.body;

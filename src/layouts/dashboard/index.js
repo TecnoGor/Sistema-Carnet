@@ -13,6 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -37,6 +40,15 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Verificar autenticación al cargar el dashboard
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      navigate("/authentication/sign-in");
+    }
+  }, [navigate]);
 
   return (
     <DashboardLayout>

@@ -85,7 +85,7 @@ function Tables() {
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <Carnet number={4562112245947852} holder="jack peterson" expires="11/22" />
+                <Carnet />
               </MDBox>
             </Card>
           </Grid>

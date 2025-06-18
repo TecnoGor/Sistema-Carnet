@@ -8,6 +8,8 @@ import logoHeader2 from "assets/images/carnetDesign/Logos_Ipostel-03.png";
 import banner from "assets/images/carnetDesign/CARNET-06.png";
 import bandera from "assets/images/carnetDesign/CARNET-03.png";
 import people from "assets/images/John_doe.jpg";
+import fotoCarnet from "assets/images/fotoCarnet.png";
+import firma from "assets/images/image002.png";
 
 const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) => (
   <div style={{ flexDirection: "row", display: "flex" }}>
@@ -124,7 +126,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
               }}
             />
             <img
-              src={foto || people}
+              src={foto || fotoCarnet}
               alt="people"
               style={{
                 width: "2.7cm",
@@ -249,6 +251,18 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
           Postal al finalizar la relación laboral.
         </p>
         <p>5. En caso de extravio, favor notificarlo al teléfono: (0212) 405.32.19.</p>
+        <div>
+          <img
+            src={firma}
+            alt="firma"
+            style={{
+              position: "absolute",
+              width: "3.5cm",
+              marginTop: -20,
+              marginLeft: 25,
+            }}
+          />
+        </div>
         <div style={{ textAlign: "center", marginTop: 90 }}>
           <p> Centro Postal de Caracas </p>
           <p> Caracas - Venezuela. Zp. 1020 </p>

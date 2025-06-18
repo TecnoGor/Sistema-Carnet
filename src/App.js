@@ -21,22 +21,8 @@ import brandWhite from "assets/images/logo-ct.png";
 import iposLight from "assets/images/Logo_Ipos.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 import Login from "layouts/authentication/sign-in"; // Asegúrate de que esta ruta es correcta
-
-// Componente para rutas protegidas
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("authToken");
-  const { pathname } = useLocation();
-
-  if (!token && pathname !== "/authentication/sign-in") {
-    return <Navigate to="/authentication/sign-in" replace />;
-  }
-
-  return children;
-};
-
-ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+import { ProtectedRoute } from "components/ProtectedRoutes";
+import { Dashboard } from "@mui/icons-material";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -224,11 +210,15 @@ export default function App() {
         <Route
           path="*"
           element={
-            <Navigate
-              to={localStorage.getItem("authToken") ? "/dashboard" : "/authentication/sign-in"}
-            />
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+            // <Navigate
+            //   to={localStorage.getItem("authToken") ? "/dashboard" : "/authentication/sign-in"}
+            // />
           }
         />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </ThemeProvider>
   );

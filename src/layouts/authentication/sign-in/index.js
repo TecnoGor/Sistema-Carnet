@@ -13,11 +13,12 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "context/AuthContext";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -43,12 +44,14 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
+  const { login } = useContext(AuthContext);
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,10 +72,7 @@ function Basic() {
       );
 
       if (response.data.token) {
-        // Guardar el token en localStorage o en el estado global
-        localStorage.setItem("authToken", response.data.token);
-        // Redireccionar al dashboard o página principal
-        navigate("/dashboard");
+        login(response.data.token, response.data.user);
       } else {
         setError("Credenciales inválidas o error en el servidor");
       }
