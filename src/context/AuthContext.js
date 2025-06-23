@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import PropTypes from "prop-types";
 
@@ -11,6 +12,55 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const verifyToken = async (token) => {
+    try {
+      // 1. Verificar primero si el token está expirado localmente
+      const decoded = jwtDecode(token);
+      if (decoded.exp * 1000 < Date.now()) {
+        return false;
+      }
+
+      // 2. Luego verificar con el backend
+      const response = await axios.get("http://10.16.9.24:5001/verify-token", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.valid && response.data.user) {
+        // Guardamos la información del usuario
+        setUser({
+          codper: response.data.user.codper,
+          firstname: response.data.user.firstname,
+          rol: response.data.user.rol,
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      return false;
+    }
+  };
+
+  // const login = async (credentials) => {
+  //   try {
+  //     const response = await axios.post("http://10.16.9.24:5001/login", credentials);
+  //     const { token } = response.data;
+  //     localStorage.setItem("authToken", token);
+  //     const isValid = await verifyToken(token);
+
+  //     if (!isValid) {
+  //       throw new Error("Token inválido después de login");
+  //     }
+
+  //     setIsAuthenticated(true);
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //     localStorage.removeItem("authToken");
+  //     return false;
+  //   }
+  // };
+
   const login = async (token, userData) => {
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
@@ -18,6 +68,32 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
     navigate("/dashboard");
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const isValid = await verifyToken(token);
+        setIsAuthenticated(isValid);
+
+        if (!isValid) {
+          localStorage.removeItem("authToken");
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        localStorage.removeItem("authToken");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const logout = async () => {
     try {

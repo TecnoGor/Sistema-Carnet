@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "context/AuthContext";
+import MDBox from "./MDBox";
+import { CircularProgress } from "@mui/material";
 import PropTypes from "prop-types";
 
 export const ProtectedRoute = ({ children, roles = [] }) => {
@@ -8,7 +10,11 @@ export const ProtectedRoute = ({ children, roles = [] }) => {
   const location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>; // O un spinner
+    return (
+      <MDBox display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress color="info" />
+      </MDBox>
+    );
   }
 
   if (!isAuthenticated) {

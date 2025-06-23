@@ -20,7 +20,7 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 import brandWhite from "assets/images/logo-ct.png";
 import iposLight from "assets/images/Logo_Ipos.png";
 import brandDark from "assets/images/logo-ct-dark.png";
-import Login from "layouts/authentication/sign-in"; // Asegúrate de que esta ruta es correcta
+import Basic from "layouts/authentication/sign-in"; // Asegúrate de que esta ruta es correcta
 import { ProtectedRoute } from "components/ProtectedRoutes";
 import { Dashboard } from "@mui/icons-material";
 
@@ -206,16 +206,15 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="/authentication/sign-in" element={<Login />} />
+        <Route path="/authentication/sign-in" element={<Basic />} />
         <Route
           path="*"
           element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-            // <Navigate
-            //   to={localStorage.getItem("authToken") ? "/dashboard" : "/authentication/sign-in"}
-            // />
+            localStorage.getItem("authToken") ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Navigate to="/authentication/sign-in" replace />
+            )
           }
         />
         <Route path="*" element={<Navigate to="/dashboard" />} />
