@@ -5,11 +5,13 @@ import bgImage from "assets/images/carnetDesign/CARNET-01.png";
 import logoIpos from "assets/images/ipostel.png";
 import logoHeader from "assets/images/carnetDesign/Logos_Ipostel-04.png";
 import logoHeader2 from "assets/images/carnetDesign/Logos_Ipostel-03.png";
+import sello from "assets/images/selloSeguridad.png";
 import banner from "assets/images/carnetDesign/CARNET-06.png";
 import bandera from "assets/images/carnetDesign/CARNET-03.png";
 import people from "assets/images/John_doe.jpg";
 import fotoCarnet from "assets/images/fotoCarnet.png";
 import firma from "assets/images/image002.png";
+import zIndex from "@mui/material/styles/zIndex";
 
 const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) => (
   <div style={{ flexDirection: "row", display: "flex" }}>
@@ -240,17 +242,19 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
           paddingTop: 30,
         }}
       >
-        <p>1. Este carnet es de uso personal e intransferible, no implica autoridad alguna.</p>
-        <p>2. Debe portarse en un lugar visible.</p>
-        <p>
-          3. La institución no se hace responsable de las acciones ejecutadas por el portador de
-          esta identificación. Solo responde de las acciones en el desempeño de sus funciones.
-        </p>
-        <p>
-          4. Esta identificación es de IPOSTEL y debe ser entregado a la Dirección de Seguridad
-          Postal al finalizar la relación laboral.
-        </p>
-        <p>5. En caso de extravio, favor notificarlo al teléfono: (0212) 405.32.19.</p>
+        <div style={{ zIndex: 20 }}>
+          <p>1. Este carnet es de uso personal e intransferible, no implica autoridad alguna.</p>
+          <p>2. Debe portarse en un lugar visible.</p>
+          <p>
+            3. La institución no se hace responsable de las acciones ejecutadas por el portador de
+            esta identificación. Solo responde de las acciones en el desempeño de sus funciones.
+          </p>
+          <p>
+            4. Esta identificación es de IPOSTEL y debe ser entregado a la Dirección de Seguridad
+            Postal al finalizar la relación laboral.
+          </p>
+          <p>5. En caso de extravio, favor notificarlo al teléfono: (0212) 405.32.19.</p>
+        </div>
         <div>
           <img
             src={firma}
@@ -260,10 +264,22 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
               width: "3.5cm",
               marginTop: -20,
               marginLeft: 25,
+              zIndex: 10,
+            }}
+          />
+          <img
+            src={sello}
+            alt="sello"
+            style={{
+              position: "absolute",
+              width: "3.5cm",
+              marginTop: -20,
+              marginLeft: 25,
+              zIndex: 1,
             }}
           />
         </div>
-        <div style={{ textAlign: "center", marginTop: 90 }}>
+        <div style={{ textAlign: "center", marginTop: 90, zIndex: 20 }}>
           <p> Centro Postal de Caracas </p>
           <p> Caracas - Venezuela. Zp. 1020 </p>
         </div>

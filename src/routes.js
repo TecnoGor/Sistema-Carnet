@@ -7,6 +7,7 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Carnetizacion from "layouts/carnetizacion";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -22,20 +23,20 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tablas",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
-  },
-  {
-    type: "collapse",
     name: "Carnetización",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <Billing />,
+    key: "tables",
+    icon: <Icon fontSize="small">remember_me</Icon>,
+    route: "/carnetizacion",
+    component: <Carnetizacion />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Carnetización",
+  //   key: "billing",
+  //   icon: <Icon fontSize="small">remember_me</Icon>,
+  //   route: "/billing",
+  //   component: <Billing />,
+  // },
   // {
   //   type: "collapse",
   //   name: "RTL",
@@ -44,14 +45,14 @@ const routes = [
   //   route: "/rtl",
   //   component: <RTL />,
   // },
-  {
-    type: "collapse",
-    name: "Notificaciones",
-    key: "notifications",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Notificaciones",
+  //   key: "notifications",
+  //   icon: <Icon fontSize="small">notifications</Icon>,
+  //   route: "/notifications",
+  //   component: <Notifications />,
+  // },
   {
     type: "collapse",
     name: "Perfil",
