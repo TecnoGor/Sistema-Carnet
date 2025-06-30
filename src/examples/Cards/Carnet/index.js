@@ -205,7 +205,7 @@ function Carnet() {
   const buscarEmpleado = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://10.16.9.24:5001/empleado/${ced}`);
+      const response = await axios.get(`http://10.16.9.24:5000/empleado/${ced}`);
       // console.log(response.data);
       setEmpleado(response.data);
       const codeSinCeros = Number(response.data.ofiuniadm);
@@ -222,7 +222,7 @@ function Carnet() {
   const buscarColor = async (ofiuniadm) => {
     // console.log(ofiuniadm);
     try {
-      const response = await axios.get(`http://10.16.9.24:5002/api/color_ger/${ofiuniadm}`);
+      const response = await axios.get(`http://10.16.9.24:5000/api/color_ger/${ofiuniadm}`);
       // console.log(response.data);
       if (response.data && response.data.color) {
         setColor(response.data);
