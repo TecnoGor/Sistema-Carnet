@@ -52,7 +52,7 @@ export default function App() {
 
   const verificarEmpleado = async (cedula) => {
     try {
-      const response = await fetch(`http://10.16.9.24:5001/empleado/${cedula}`);
+      const response = await fetch(`http://10.16.9.24:5000/empleado/${cedula}`);
 
       if (!response.ok) {
         throw new Error("Error en la respuesta del servidor");
