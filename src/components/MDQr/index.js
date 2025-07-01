@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const CarnetQR = ({ empleadoId }) => {
   if (!empleadoId) return null;
 
-  const qrValue = `http://10.16.9.24:3000/?ced=${empleadoId}`;
+  const qrValue = `http://10.16.12.67:3000/?ced=${empleadoId}`;
 
   return (
     <div style={{ padding: "0", display: "absolute", justifyContent: "center" }}>

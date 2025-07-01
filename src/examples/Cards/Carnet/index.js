@@ -174,7 +174,7 @@ function Carnet() {
     console.log(processedFoto, empleado.cedper);
     try {
       const response = await axios.post(
-        "http://10.16.9.24:5000/api/guardar-foto",
+        "http://10.16.12.67:5000/api/guardar-foto",
         {
           cedula: empleado.cedper, // Usamos la cédula del empleado ya cargado
           foto: processedFoto, // Base64 de la imagen procesada
@@ -205,7 +205,7 @@ function Carnet() {
   const buscarEmpleado = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://10.16.9.24:5000/empleado/${ced}`);
+      const response = await axios.get(`http://10.16.12.67:5000/empleado/${ced}`);
       // console.log(response.data);
       setEmpleado(response.data);
       const codeSinCeros = Number(response.data.ofiuniadm);
@@ -222,7 +222,7 @@ function Carnet() {
   const buscarColor = async (ofiuniadm) => {
     // console.log(ofiuniadm);
     try {
-      const response = await axios.get(`http://10.16.9.24:5000/api/color_ger/${ofiuniadm}`);
+      const response = await axios.get(`http://10.16.12.67:5000/api/color_ger/${ofiuniadm}`);
       // console.log(response.data);
       if (response.data && response.data.color) {
         setColor(response.data);
@@ -235,7 +235,7 @@ function Carnet() {
 
   const buscarFoto = async () => {
     try {
-      const response = await axios.get(`http://10.16.9.24:5000/api/buscarFoto/${ced}`);
+      const response = await axios.get(`http://10.16.12.67:5000/api/buscarFoto/${ced}`);
 
       if (response.data && response.data.foto) {
         setFoto(response.data.foto);

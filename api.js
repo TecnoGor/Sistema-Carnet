@@ -20,7 +20,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 const pool = new Pool({
     user: 'postgres',
-    host: '10.16.9.24',
+    host: '10.16.12.67',
     database: 'sicven',
     password: 'postgres',
     port: 5432,
