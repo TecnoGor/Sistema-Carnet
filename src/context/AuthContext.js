@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { ApiOutlined } from "@mui/icons-material";
 
 export const AuthContext = createContext();
 
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_Host = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   const verifyToken = async (token) => {
@@ -21,7 +23,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // 2. Luego verificar con el backend
-      const response = await axios.get("http://10.16.9.24:5001/verify-token", {
+      const response = await axios.get(`${API_Host}/verify-token`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -97,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("http://10.16.9.24:5000/logout", null, {
+      await axios.post(`${API_Host}/logout`, null, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

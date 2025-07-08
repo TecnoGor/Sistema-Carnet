@@ -41,7 +41,7 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import bgImage from "assets/images/imagen.png";
 
 function Basic() {
   const { login } = useContext(AuthContext);
@@ -52,6 +52,7 @@ function Basic() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/dashboard";
+  const API_Host = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +62,7 @@ function Basic() {
     try {
       // Llamada a tu API de login
       const response = await axios.post(
-        "http://10.16.9.24:5000/login",
+        `${API_Host}/login`,
         {
           username,
           password,
@@ -120,7 +121,7 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Iniciar Sesion en el Sistema Integral de Carnetización Postal
+            Sistema de Carnetización
           </MDTypography>
           {/* <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>

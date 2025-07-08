@@ -7,11 +7,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 // const { default: data } = require('layouts/tables/data/authorsTableData');
+require('dotenv').config({ 
+  path: process.env.NODE_ENV === 'production' 
+    ? '.env.production' 
+    : '.env.development'
+});
 
 const app = express();
-const port = 5000;
+const port = process.env.REACT_APP_API_PORT;
 
-const SECRET_KEY = 'MAMALO';
+const SECRET_KEY = process.env.REACT_APP_API_KEY;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -19,11 +24,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 const pool = new Pool({
-    user: 'postgres',
-    host: '10.16.12.67',
-    database: 'sicven',
-    password: 'postgres',
-    port: 5432,
+    user: process.env.REACT_APP_DB_USER,
+    host: process.env.REACT_APP_DB_HOST,
+    database: process.env.REACT_APP_DB_NAME,
+    password: process.env.REACT_APP_DB_PASSWORD,
+    port: process.env.REACT_APP_DB_PORT,
 });
 
 const secondPool = new Pool({
