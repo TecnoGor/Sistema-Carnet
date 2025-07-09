@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 // import { MDBox } from "components/MDBox";
 
 const CarnetQR = ({ empleadoId }) => {
-  const API_Host = process.env.REACT_APP_API_API_URL;
+  const APP_Host = process.env.REACT_APP_URL;
   if (!empleadoId) return null;
 
-  const qrValue = `${API_Host}/?ced=${empleadoId}`;
+  const qrValue = `${APP_Host}/?ced=${empleadoId}`;
 
   return (
     <div style={{ padding: "0", display: "absolute", justifyContent: "center" }}>

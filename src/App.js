@@ -40,6 +40,7 @@ export default function App() {
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
   const location = useLocation();
+  const API_Host = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -52,7 +53,7 @@ export default function App() {
 
   const verificarEmpleado = async (cedula) => {
     try {
-      const response = await fetch(`http://10.16.12.67:5000/empleado/${cedula}`);
+      const response = await fetch(`${API_Host}/empleado/${cedula}`);
 
       if (!response.ok) {
         throw new Error("Error en la respuesta del servidor");

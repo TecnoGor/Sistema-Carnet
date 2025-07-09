@@ -41,7 +41,7 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/imagen.png";
+import bgImage from "assets/images/Fachada.png";
 
 function Basic() {
   const { login } = useContext(AuthContext);
