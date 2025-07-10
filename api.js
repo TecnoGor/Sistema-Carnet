@@ -7,11 +7,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 // const { default: data } = require('layouts/tables/data/authorsTableData');
-require('dotenv').config({ 
-  path: process.env.NODE_ENV === 'production' 
-    ? '.env.production' 
-    : '.env.development'
-});
+require('dotenv').config({ path: '.env.production' });
 
 const app = express();
 const port = process.env.REACT_APP_API_PORT;
