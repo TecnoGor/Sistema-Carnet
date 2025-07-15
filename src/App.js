@@ -44,9 +44,9 @@ export default function App() {
 
   useEffect(() => {
     // Intentar una conexión simple al cargar la app
-    fetch('https://10.16.12.47:5001/healthcheck', { 
-      mode: 'no-cors',
-      cache: 'no-store'
+    fetch("https://10.16.12.47:5001/healthcheck", { 
+      mode: "no-cors",
+      cache: "no-store",
     }).catch(() => {}); // Ignorar errores intencionalmente
   }, []);
 
