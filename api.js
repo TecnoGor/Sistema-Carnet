@@ -261,6 +261,10 @@ app.get('/api/buscarFoto/:ced', async (req, res) => {
   }
 });
 
+app.get('/healthcheck', (req, res) => {
+  res.status(200).send('OK');
+});
+
 https.createServer(options, app).listen(5001, '0.0.0.0', () => {
   console.log('API HTTPS en https://10.16.12.47:5001');
 })
