@@ -43,6 +43,14 @@ export default function App() {
   const API_Host = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
+    // Intentar una conexión simple al cargar la app
+    fetch('https://10.16.12.47:5001/healthcheck', { 
+      mode: 'no-cors',
+      cache: 'no-store'
+    }).catch(() => {}); // Ignorar errores intencionalmente
+  }, []);
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const ced = queryParams.get("ced");
 
