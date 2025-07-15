@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const { Pool } = require('pg');
 const multer = require('multer');
 const path = require('path');
@@ -6,11 +8,16 @@ const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const { Key } = require('@mui/icons-material');
 // const { default: data } = require('layouts/tables/data/authorsTableData');
 require('dotenv').config({ path: '.env.production' });
 
 const app = express();
 const port = process.env.REACT_APP_API_PORT;
+const options = {
+  key: fs.readFileSync('/etc/ssl/private/backend.key'),
+  cert: fs.readFileSync('/etc/ssl/certs/backend.crt')
+};
 
 const SECRET_KEY = process.env.REACT_APP_API_KEY;
 const corsOptions = {
@@ -254,6 +261,9 @@ app.get('/api/buscarFoto/:ced', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+https.createServer(options, app).listen(5001, '0.0.0.0', () => {
+  console.log('API HTTPS en https://10.16.12.47:5001');
+})
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
