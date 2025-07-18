@@ -153,9 +153,9 @@ app.post('/login', async (req, res) => {
 });
 
 // Ruta para consultar los usuarios
-app.post('/api/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
     try {
-        const { rows } = await pool.query('SELECT id, firstname, secondname, mail, phone, username, status, rol FROM users');
+        const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users');
         res.json(rows);
     } catch (err) {
         console.error(err);
@@ -266,9 +266,9 @@ app.get('/healthcheck', (req, res) => {
   res.status(200).send('OK');
 });
 
-https.createServer(options, app).listen(port, '0.0.0.0', () => {
-  console.log('API HTTPS en https://10.16.12.47:5001');
-})
-// app.listen(port, () => {
-//     console.log(`Server running on port ${port}`);
-// });
+// https.createServer(options, app).listen(port, '0.0.0.0', () => {
+//   console.log('API HTTPS en https://10.16.12.47:5001');
+// })
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});

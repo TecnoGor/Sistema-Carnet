@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
@@ -41,14 +42,23 @@ export default function App() {
   const { pathname } = useLocation();
   const location = useLocation();
   const API_Host = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Intentar una conexión simple al cargar la app
-    fetch("https://10.16.12.47:5001/healthcheck", {
+    fetch(`${API_Host}/healthcheck`, {
       mode: "no-cors",
       cache: "no-store",
     }).catch(() => {}); // Ignorar errores intencionalmente
   }, []);
+
+  // useEffect(() => {
+  //   // Verificar autenticación al cargar el dashboard
+  //   const token = localStorage.getItem("authToken");
+  //   if (!token) {
+  //     navigate("/authentication/sign-in");
+  //   }
+  // }, [navigate]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -175,7 +185,7 @@ export default function App() {
       alignItems="center"
       width="3.25rem"
       height="3.25rem"
-      bgColor="white"
+      bgColor="#1f283e"
       shadow="sm"
       borderRadius="50%"
       position="fixed"

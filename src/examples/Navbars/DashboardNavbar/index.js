@@ -154,14 +154,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
               {/* <MDInput label="Search here" /> */}
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
-              <MDButton onClick={logout}>
+              <MDButton color="dark" onClick={logout}>
                 <IconButton sx={navbarIconButton} size="small" disableRipple>
                   <Icon sx={iconsStyle}>logout</Icon>
                 </IconButton>
               </MDButton>
               {/* <Link onClick={handleLogout}> */}
               {/* </Link> */}
-              <IconButton
+              {/* <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
@@ -171,7 +171,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 <Icon sx={iconsStyle} fontSize="medium">
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
-              </IconButton>
+              </IconButton> */}
               {/* <IconButton
                 size="small"
                 disableRipple

@@ -30,7 +30,7 @@ import banner from "assets/images/carnetDesign/CARNET-06.png";
 import bandera from "assets/images/carnetDesign/CARNET-03.png";
 import people from "assets/images/woman2.avif";
 import fotoCarnet from "assets/images/fotoCarnet.png";
-import fondoMesa from "assets/images/imagen.png";
+import fondoMesa from "assets/images/desktop-wallpaper-wooden-table-simple-wood-texture-cool-1280x720-wooden-dark.jpg";
 import mesa from "assets/images/mesa.jpg";
 import masterCardLogo from "assets/images/logos/mastercard.png";
 import { border, borderRadius, fontSize, margin, padding, textAlign } from "@mui/system";
@@ -327,6 +327,7 @@ function Carnet() {
         boxShadow: xl,
         position: "relative",
         backgroundImage: `url(${fondoMesa})`,
+        backgroundSize: "cover",
       })}
     >
       <MDBox display="flex" zIndex={2} p={2} justifyContent="center">

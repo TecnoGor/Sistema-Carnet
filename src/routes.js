@@ -8,6 +8,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Carnetizacion from "layouts/carnetizacion";
+import Users from "layouts/usuarios";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -55,11 +56,11 @@ const routes = [
   // },
   {
     type: "collapse",
-    name: "Perfil",
+    name: "Usuarios",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
+    route: "/usuarios",
+    component: <Users />,
   },
   // {
   //   type: "collapse",
