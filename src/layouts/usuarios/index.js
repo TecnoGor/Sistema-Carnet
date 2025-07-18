@@ -32,6 +32,9 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 // import Carnet from "examples/Cards/Carnet";
 
+// Modals
+import RegUsers from "examples/Modals/Usuarios";
+
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
@@ -133,9 +136,13 @@ function Users() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography variant="h6" color="white">
-                  Usuarios
-                </MDTypography>
+                <MDButton variant="gradient" color="dark" onClick={handleShow}>
+                  <Icon sx={{ fontWeight: "bold" }}>person</Icon>
+                  &nbsp;Registrar Usuarios
+                </MDButton>
+              </MDBox>
+              <MDBox>
+                <RegUsers hClose={handleClose} show={show} />
               </MDBox>
               <MDBox pt={3}>
                 {/* <Carnet number={4562112245947852} holder="jack peterson" expires="11/22" /> */}
@@ -143,7 +150,7 @@ function Users() {
                   {loading ? (
                     <MDBox p={3} textAlign="center">
                       <MDTypography variant="body2" color="text">
-                        Cargando pacientes...
+                        Cargando Usuarios...
                       </MDTypography>
                     </MDBox>
                   ) : error ? (
