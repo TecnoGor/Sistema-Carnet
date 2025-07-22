@@ -52,13 +52,13 @@ export default function App() {
     }).catch(() => {}); // Ignorar errores intencionalmente
   }, []);
 
-  // useEffect(() => {
-  //   // Verificar autenticación al cargar el dashboard
-  //   const token = localStorage.getItem("authToken");
-  //   if (!token) {
-  //     navigate("/authentication/sign-in");
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    // Verificar autenticación al cargar el dashboard
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      navigate("/authentication/sign-in");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);

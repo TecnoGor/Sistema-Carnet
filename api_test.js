@@ -10,7 +10,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { Key } = require('@mui/icons-material');
 // const { default: data } = require('layouts/tables/data/authorsTableData');
-require('dotenv').config({ path: '.env.production' });
+require('dotenv').config({ path: '.env.development' });
 
 const app = express();
 const port = process.env.REACT_APP_API_PORT;
@@ -161,6 +161,30 @@ app.get('/api/users', async (req, res) => {
         console.error(err);
         res.status(501).send('Error al obtener los datos');
     }
+});
+
+app.post('/api/insertUsers', async (req, res) => {
+  const { firstname, secondname, ci, mail, phone, username, password, status, rol } = req.body;
+  const passwordHash = hashPassword(password);
+  try {
+    const result = await pool.query(
+      `INSERT INTO users(firstname, secondname, mail, ci, phone, username, password, status, rol)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+       [firstname, secondname, mail, ci, phone, username, passwordHash, status, rol]
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: result.rows[0],
+      message: 'Usuario creado con éxito',
+    });
+  } catch (error) {
+    console.log('Error al guardar el usuario: ', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error al guardar el usuario',
+    });
+  }
 });
 
 // Ruta para guardar las fotos

@@ -19,7 +19,7 @@ function RegUsers({ hClose, show }) {
         <UserForm />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary">Siguiente</Button>
+        <Button variant="primary">Guardar</Button>
         <Button variant="secondary" onClick={hClose}>
           Cerrar
         </Button>

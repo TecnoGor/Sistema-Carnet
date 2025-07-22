@@ -39,6 +39,42 @@ function UserForm() {
           </Form.Group>
         </Col>
       </Row>
+      <hr></hr>
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="correo.ControlInput4">
+            <Form.Label>Correo Electronico</Form.Label>
+            <Form.Control type="mail" placeholder="Correo Electronico" />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="telefono.ControlInput4">
+            <Form.Label>Teléfono</Form.Label>
+            <Form.Control type="text" placeholder="Numero de Telefono" />
+          </Form.Group>
+        </Col>
+      </Row>
+      <hr></hr>
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="nomuser.ControlInput5">
+            <Form.Label>Nombre de Usuario</Form.Label>
+            <Form.Control type="text" placeholder="Nombre de Usuario" />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="nomuser.ControlInput5">
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control type="password" placeholder="Ingrese su contraseña" />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="nomuser.ControlInput5">
+            <Form.Label>Confirmación</Form.Label>
+            <Form.Control type="password" placeholder="Ingrese de nuevo" />
+          </Form.Group>
+        </Col>
+      </Row>
     </Form>
   );
 }
