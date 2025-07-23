@@ -163,14 +163,14 @@ function DataTable({
                 renderInput={(params) => <MDInput {...params} />}
               />
               <MDTypography variant="caption" color="secondary">
-                &nbsp;&nbsp;entries per page
+                &nbsp;&nbsp;usuarios por página
               </MDTypography>
             </MDBox>
           )}
           {canSearch && (
             <MDBox width="12rem" ml="auto">
               <MDInput
-                placeholder="Search..."
+                placeholder="Buscar..."
                 value={search}
                 size="small"
                 fullWidth

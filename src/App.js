@@ -24,6 +24,7 @@ import brandDark from "assets/images/logo-ct-dark.png";
 import Basic from "layouts/authentication/sign-in"; // Asegúrate de que esta ruta es correcta
 import { ProtectedRoute } from "components/ProtectedRoutes";
 import { Dashboard } from "@mui/icons-material";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
