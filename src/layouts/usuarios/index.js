@@ -34,10 +34,7 @@ import DataTable from "examples/Tables/DataTable";
 
 // Modals
 import RegUsers from "examples/Modals/Usuarios";
-
-// Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
+import Swal from "sweetalert2";
 
 function Users() {
   const [show, setShow] = useState(false);
@@ -74,6 +71,10 @@ function Users() {
     { Header: "Acciones", accessor: "actions", width: "10%" },
   ];
 
+  const alertaPrueba = () => {
+    Swal.fire("SweetAlert2 is working!");
+  };
+
   const rows = users.map((user) => ({
     id_persona: user.id,
     nombres: user.firstname,
@@ -82,7 +83,7 @@ function Users() {
     nombre_usuario: user.username,
     actions: (
       <MDBox display="flex" gap={1}>
-        <MDButton variant="text" color="info" size="small">
+        <MDButton variant="text" color="info" size="small" onClick={alertaPrueba}>
           <Icon>edit</Icon>&nbsp;Editar
         </MDButton>
         <MDButton variant="text" color="error" size="small">

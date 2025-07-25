@@ -173,13 +173,16 @@ app.post('/api/insertUsers', async (req, res) => {
        [firstname, secondname, mail, ci, phone, username, passwordHash, status, rol]
     );
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       data: result.rows[0],
       message: 'Usuario creado con éxito',
     });
   } catch (error) {
     console.log('Error al guardar el usuario: ', error);
+    if (error.code === '23505') {
+      return res.status(400).json({ error: 'El usuario ya existe' });
+    }
     return res.status(500).json({
       success: false,
       message: 'Error al guardar el usuario',

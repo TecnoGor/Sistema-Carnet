@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import UserForm from "examples/Forms/User/UserForm";
 import axios from "axios";
+import Swal from "sweetalert2";
 // import PersonaForm from "examples/Cards/Forms/Persona";
 // import DatosPersonales from "examples/Cards/Forms/DatosPersonales";
 
@@ -44,14 +45,25 @@ function RegUsers({ hClose, show }) {
     ];
     for (const field of requiredFields) {
       if (!formData[field]) {
-        alert(`Por favor complete el campo ${field}`);
+        Swal.fire({
+          title: "Error!",
+          text: `Por favor complete todos los campos!`,
+          icon: "error",
+          draggable: true,
+        });
+        // alert(`Por favor complete el campo ${field}`);
         return false;
       }
     }
 
     // Validar que las contraseñas coincidan
     if (formData.password !== formData.password2) {
-      alert("Las contraseñas no coinciden");
+      Swal.fire({
+        title: "Error!",
+        text: `Las contraseñas no coinciden`,
+        icon: "error",
+        draggable: true,
+      });
       return false;
     }
 
@@ -86,7 +98,12 @@ function RegUsers({ hClose, show }) {
       });
 
       if (response.status === 201) {
-        alert("Usuario registrado exitosamente");
+        Swal.fire({
+          title: "Usuario Registrado!",
+          text: "El usuario ha sido registrado con éxito",
+          icon: "success",
+          draggable: true,
+        });
         hClose(); // Cerrar el modal después del registro exitoso
       }
     } catch (error) {
