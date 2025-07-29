@@ -34,14 +34,18 @@ import DataTable from "examples/Tables/DataTable";
 
 // Modals
 import RegUsers from "examples/Modals/Usuarios";
-import Swal from "sweetalert2";
+import EditUser from "examples/Modals/Usuarios/EditUser";
+// import Swal from "sweetalert2";
 
 function Users() {
   const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userEdit, setUserEdit] = useState({});
   const handleClose = () => setShow(false);
+  const handleCloseEdit = () => setShowEdit(false);
   const handleShow = () => setShow(true);
 
   const fetchUsers = async () => {
@@ -71,8 +75,9 @@ function Users() {
     { Header: "Acciones", accessor: "actions", width: "10%" },
   ];
 
-  const alertaPrueba = () => {
-    Swal.fire("SweetAlert2 is working!");
+  const handleEditClick = (user) => {
+    setUserEdit(user);
+    setShowEdit(true);
   };
 
   const rows = users.map((user) => ({
@@ -83,11 +88,11 @@ function Users() {
     nombre_usuario: user.username,
     actions: (
       <MDBox display="flex" gap={1}>
-        <MDButton variant="text" color="info" size="small" onClick={alertaPrueba}>
+        <MDButton variant="text" color="info" size="small" onClick={() => handleEditClick(user.id)}>
           <Icon>edit</Icon>&nbsp;Editar
         </MDButton>
         <MDButton variant="text" color="error" size="small">
-          <Icon>delete</Icon>&nbsp;Eliminar
+          <Icon>delete</Icon>&nbsp;Inhabilitar
         </MDButton>
       </MDBox>
     ),
@@ -144,6 +149,12 @@ function Users() {
               </MDBox>
               <MDBox>
                 <RegUsers hClose={handleClose} show={show} />
+                <EditUser
+                  hClose={handleCloseEdit}
+                  show={showEdit}
+                  userData={userEdit}
+                  refreshUsers={fetchUsers}
+                />
               </MDBox>
               <MDBox pt={3}>
                 {/* <Carnet number={4562112245947852} holder="jack peterson" expires="11/22" /> */}

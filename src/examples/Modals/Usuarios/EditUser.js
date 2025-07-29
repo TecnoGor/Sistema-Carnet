@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import UserForm from "examples/Forms/User/UserForm";
 import axios from "axios";
+import { Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
 // import PersonaForm from "examples/Cards/Forms/Persona";
 // import DatosPersonales from "examples/Cards/Forms/DatosPersonales";
 
-function RegUsers({ hClose, show }) {
+function EditUser({ hClose, show, userData, refreshUsers }) {
   const API_Host = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     firstname: "",
-    lastname: "",
+    secondname: "",
     username: "",
     ci: "",
     email: "",
@@ -21,6 +22,7 @@ function RegUsers({ hClose, show }) {
     password2: "",
     rol: "",
   });
+  const [loadingUser, setLoadingUser] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,19 +32,44 @@ function RegUsers({ hClose, show }) {
     }));
   };
 
+  useEffect(() => {
+    if (show && userData) {
+      const fetchUserData = async () => {
+        try {
+          setLoadingUser(true);
+          const response = await axios.get(`${API_Host}/api/user/${userData}`);
+
+          setFormData({
+            firstname: response.data.firstname,
+            secondname: response.data.secondname,
+            username: response.data.username,
+            typeCi: response.data.typeCi || "V",
+            ci: response.data.ci,
+            mail: response.data.mail,
+            phone: response.data.phone,
+            password: "",
+            password2: "",
+            rol: response.data.rol,
+          });
+        } catch (error) {
+          console.error("Error al cargar los datos del usuario", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "Error al cargar los datos del usuario. Por favor, inténtelo de nuevo.",
+          });
+          hClose();
+        } finally {
+          setLoadingUser(false);
+        }
+      };
+      fetchUserData();
+    }
+  }, [show, userData, API_Host, hClose]);
+
   const validateForm = () => {
     // Validar que todos los campos estén completos
-    const requiredFields = [
-      "typeCi",
-      "ci",
-      "firstname",
-      "secondname",
-      "mail",
-      "phone",
-      "username",
-      "password",
-      "password2",
-    ];
+    const requiredFields = ["typeCi", "ci", "firstname", "secondname", "mail", "phone", "username"];
     for (const field of requiredFields) {
       if (!formData[field]) {
         Swal.fire({
@@ -55,17 +82,16 @@ function RegUsers({ hClose, show }) {
         return false;
       }
     }
-
     // Validar que las contraseñas coincidan
-    if (formData.password !== formData.password2) {
-      Swal.fire({
-        title: "Error!",
-        text: `Las contraseñas no coinciden`,
-        icon: "error",
-        draggable: true,
-      });
-      return false;
-    }
+    // if (formData.password !== formData.password2) {
+    //   Swal.fire({
+    //     title: "Error!",
+    //     text: `Las contraseñas no coinciden`,
+    //     icon: "error",
+    //     draggable: true,
+    //   });
+    //   return false;
+    // }
 
     // Validar formato de correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,10 +103,11 @@ function RegUsers({ hClose, show }) {
     return true;
   };
 
-  const regUser = async () => {
+  const updateUser = async () => {
     if (!validateForm()) return;
     try {
-      const userData = {
+      const updateData = {
+        id: userData,
         firstname: formData.firstname,
         secondname: formData.secondname,
         mail: formData.mail,
@@ -93,28 +120,27 @@ function RegUsers({ hClose, show }) {
         rol: formData.rol,
       };
 
-      const response = await axios.post(`${API_Host}/api/insertUsers`, userData, {
+      const response = await axios.post(`${API_Host}/api/updateUser`, updateData, {
         headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 201) {
         Swal.fire({
-          title: "Usuario Registrado!",
-          text: "El usuario ha sido registrado con éxito",
+          title: "Usuario Actualizado!",
+          text: "El usuario ha sido actualizado con éxito",
           icon: "success",
           draggable: true,
         });
+        refreshUsers();
         hClose(); // Cerrar el modal después del registro exitoso
       }
     } catch (error) {
-      console.error("Error al guardar al usuario: ", error);
-      // if (error.response) {
-      //   alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
-      // }
-      if (error.response.status === 400) {
+      console.error("Error al editar el usuario: ", error);
+      if (error.response) {
+        // alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
         Swal.fire({
-          title: "Error al registrar el usuario",
-          text: "Los datos del usuario que registro ya estan en uso. Verifique, la cedula y el nombre de usuario. 🔎",
+          title: "Error al actulizar el usuario",
+          text: `Error: ${error.response.data.message || "Error al registrar usuario"}`,
           icon: "error",
           draggable: true,
         });
@@ -137,11 +163,15 @@ function RegUsers({ hClose, show }) {
       <Modal.Body>
         {/* {currentStep === 1 && <PersonaForm />} */}
         {/* {currentStep === 2 && <DatosPersonales />} */}
-        <UserForm formData={formData} handleChange={handleChange} />
+        {loadingUser ? (
+          <Spinner animation="border" variant="primary" />
+        ) : (
+          <UserForm formData={formData} handleChange={handleChange} />
+        )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={regUser}>
-          Registrar
+        <Button variant="primary" onClick={updateUser}>
+          Editar
         </Button>
         <Button variant="secondary" onClick={hClose}>
           Cerrar
@@ -151,13 +181,15 @@ function RegUsers({ hClose, show }) {
   );
 }
 
-RegUsers.defaultProps = {
+EditUser.defaultProps = {
   show: false,
 };
 
-RegUsers.propTypes = {
+EditUser.propTypes = {
   show: PropTypes.bool,
   hClose: PropTypes.func,
+  userData: PropTypes.object,
+  refreshUsers: PropTypes.func,
 };
 
-export default RegUsers;
+export default EditUser;

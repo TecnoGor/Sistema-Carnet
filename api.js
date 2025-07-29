@@ -134,34 +134,52 @@ app.post('/register', async (req, res) => {
 
 // Ruta para iniciar sesión
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const passwordHash = hashPassword(password);
+  const { username, password } = req.body;
+  const passwordHash = hashPassword(password);
 
-    try {
-        const result = await pool.query(
-            'SELECT * FROM users WHERE username = $1 AND password = $2',
-            [username, passwordHash]
-        );
-        if (result.rows.length > 0) {
-            const token = jwt.sign({ userId: result.rows[0].codper }, SECRET_KEY, { expiresIn: '1h' });
-            res.status(200).json({ message: 'Login successful', token});
-        } else {
-            res.status(401).json({ error: 'Invalid credentials' });
-        }
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+      const result = await pool.query(
+          'SELECT * FROM users WHERE username = $1 AND password = $2',
+          [username, passwordHash]
+      );
+      if (result.rows.length > 0) {
+          const token = jwt.sign({ userId: result.rows[0].codper }, SECRET_KEY, { expiresIn: '2h' });
+          res.status(200).json({ message: 'Login successful', token});
+      } else {
+          res.status(401).json({ error: 'Invalid credentials' });
+      }
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
 });
 
 // Ruta para consultar los usuarios
-app.post('/api/users', async (req, res) => {
-    try {
-        const { rows } = await pool.query('SELECT id, firstname, secondname, mail, phone, username, status, rol FROM users');
-        res.json(rows);
-    } catch (err) {
-        console.error(err);
-        res.status(501).send('Error al obtener los datos');
+app.get('/api/users', async (req, res) => {
+  try {
+      const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users WHERE status = true ORDER BY id ASC');
+      res.json(rows);
+  } catch (err) {
+      console.error(err);
+      res.status(501).send('Error al obtener los datos');
+  }
+});
+
+app.get('/api/user/:id_user', async (req, res) => {
+  try {
+    const { id_user } = req.params;
+    const result = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, rol FROM users WHERE id = $1', [id_user]);
+
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]);
+    } else {
+      res.json({
+        message: 'N/A',
+      });
     }
+  } catch (err) {
+    console.error(err);
+    res.status(501).send('Error al obtener los datos');
+  }
 });
 
 app.post('/api/insertUsers', async (req, res) => {
@@ -174,17 +192,60 @@ app.post('/api/insertUsers', async (req, res) => {
        [firstname, secondname, mail, ci, phone, username, passwordHash, status, rol]
     );
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       data: result.rows[0],
       message: 'Usuario creado con éxito',
     });
   } catch (error) {
     console.log('Error al guardar el usuario: ', error);
+    if (error.code === '23505') {
+      return res.status(400).json({ error: 'El usuario ya existe' });
+    }
     return res.status(500).json({
       success: false,
       message: 'Error al guardar el usuario',
     });
+  }
+});
+
+app.post('/api/updateUser', async (req, res) => {
+  const { id, firstname, secondname, ci, mail, phone, username, password, status, rol } = req.body;
+  const passwordHash = hashPassword(password);
+  if (password === "") {
+    try {
+      const result = await pool.query(
+        `UPDATE users SET firstname = $2, secondname = $3, mail = $4, phone = $5, username = $6, status = $7, rol = $8 WHERE id = $1 RETURNING *`,
+        [id, firstname, secondname, mail, phone, username, status, rol]
+      );
+      return res.status(201).json({
+        success: true,
+        data: result.rows[0],
+        message: 'Usuario actualizado con éxito',
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar el usuario',
+      });
+    }
+  } else {
+    try {
+      const result = await pool.query(
+        `UPDATE users SET firstname = $2, secondname = $3, mail = $4, phone = $5, username = $6, status = $7, rol = $8, password = $9 WHERE id = $1 RETURNING *`,
+        [id, firstname, secondname, mail, phone, username, status, rol, passwordHash]
+      );
+      return res.status(201).json({
+        success: true,
+        data: result.rows[0],
+        message: 'Usuario actualizado con éxito',
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar el usuario',
+      });
+    }
   }
 });
 
