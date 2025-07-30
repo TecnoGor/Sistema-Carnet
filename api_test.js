@@ -155,7 +155,7 @@ app.post('/login', async (req, res) => {
 // Ruta para consultar los usuarios
 app.get('/api/users', async (req, res) => {
   try {
-      const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users WHERE status = true ORDER BY id ASC');
+      const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users ORDER BY id ASC');
       res.json(rows);
   } catch (err) {
       console.error(err);
@@ -204,6 +204,27 @@ app.post('/api/insertUsers', async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error al guardar el usuario',
+    });
+  }
+});
+
+app.post('/api/statusUser', async (req, res) => {
+  const { id, status } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE users SET status = $2 WHERE id = $1 RETURNING *`,
+      [id, status]
+    );
+    return res.status(201).json({
+      success: true,
+      data: result.rows[0],
+      message: 'Usuario inhabilitado con éxito',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error al inhabilitar el usuario',
     });
   }
 });

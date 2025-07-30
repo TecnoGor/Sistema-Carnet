@@ -35,18 +35,20 @@ import DataTable from "examples/Tables/DataTable";
 // Modals
 import RegUsers from "examples/Modals/Usuarios";
 import EditUser from "examples/Modals/Usuarios/EditUser";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 function Users() {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [users, setUsers] = useState([]);
+  const [showActive, setShowActive] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userEdit, setUserEdit] = useState({});
   const handleClose = () => setShow(false);
   const handleCloseEdit = () => setShowEdit(false);
   const handleShow = () => setShow(true);
+  const API_Host = process.env.REACT_APP_API_URL;
 
   const fetchUsers = async () => {
     try {
@@ -66,6 +68,45 @@ function Users() {
     fetchUsers();
   }, []);
 
+  const disabledUser = async (userId) => {
+    console.log(userId);
+    try {
+      const userData = { id: userId, status: false };
+
+      const response = await axios.post(`${API_Host}/api/statusUser`, userData, {
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Usuario Inhabilitado!",
+          text: "El usuario ha sido deshabilitado.",
+          icon: "success",
+          draggable: true,
+        });
+        fetchUsers();
+      }
+    } catch (error) {
+      if (error.response) {
+        // alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
+        Swal.fire({
+          title: "Error al inhabilitar el usuario",
+          text: `Error: ${error.response.data.message || "Error al inhabilitar usuario"}`,
+          icon: "error",
+          draggable: true,
+        });
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: `Error: ${
+            error || "Error de conexión con el servidor 🛠 , por favor intente mas tarde."
+          }`,
+          icon: "error",
+          draggable: true,
+        });
+      }
+    }
+  };
+
   const columns = [
     { Header: "ID", accessor: "id_persona", width: "10%" },
     { Header: "Nombres", accessor: "nombres", width: "25%" },
@@ -80,7 +121,11 @@ function Users() {
     setShowEdit(true);
   };
 
-  const rows = users.map((user) => ({
+  const filteredUsers = showActive
+    ? users.filter((user) => user.status === true)
+    : users.filter((user) => user.status === false);
+
+  const rows = filteredUsers.map((user) => ({
     id_persona: user.id,
     nombres: user.firstname,
     apellidos: user.secondname,
@@ -91,9 +136,20 @@ function Users() {
         <MDButton variant="text" color="info" size="small" onClick={() => handleEditClick(user.id)}>
           <Icon>edit</Icon>&nbsp;Editar
         </MDButton>
-        <MDButton variant="text" color="error" size="small">
-          <Icon>delete</Icon>&nbsp;Inhabilitar
-        </MDButton>
+        {showActive ? (
+          <MDButton variant="text" color="error" size="small" onClick={() => disabledUser(user.id)}>
+            <Icon>delete</Icon>&nbsp;Inhabilitar
+          </MDButton>
+        ) : (
+          <MDButton
+            variant="text"
+            color="success"
+            size="small"
+            onClick={() => disabledUser(user.id)}
+          >
+            <Icon>check</Icon>&nbsp;Habilitar
+          </MDButton>
+        )}
       </MDBox>
     ),
   }));
@@ -145,6 +201,14 @@ function Users() {
                 <MDButton variant="gradient" color="dark" onClick={handleShow}>
                   <Icon sx={{ fontWeight: "bold" }}>person</Icon>
                   &nbsp;Registrar Usuarios
+                </MDButton>
+                &nbsp;&nbsp;&nbsp;
+                <MDButton
+                  variant="gradient"
+                  color={showActive ? "dark" : "secondary"}
+                  onClick={() => setShowActive(!showActive)}
+                >
+                  {showActive ? "Mostrar inactivos" : "Mostrar activos"}
                 </MDButton>
               </MDBox>
               <MDBox>

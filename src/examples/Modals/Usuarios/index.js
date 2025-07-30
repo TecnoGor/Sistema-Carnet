@@ -89,7 +89,7 @@ function RegUsers({ hClose, show }) {
         password: formData.password,
         typeCi: formData.typeCi,
         ci: formData.ci,
-        status: 1,
+        status: true,
         rol: formData.rol,
       };
 

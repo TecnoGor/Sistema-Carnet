@@ -116,7 +116,7 @@ function EditUser({ hClose, show, userData, refreshUsers }) {
         password: formData.password,
         typeCi: formData.typeCi,
         ci: formData.ci,
-        status: 1,
+        status: true,
         rol: formData.rol,
       };
 
