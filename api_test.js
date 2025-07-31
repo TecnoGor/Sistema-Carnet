@@ -135,14 +135,15 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const passwordHash = hashPassword(password);
+  const status = true;
 
   try {
       const result = await pool.query(
-          'SELECT * FROM users WHERE username = $1 AND password = $2',
-          [username, passwordHash]
+          'SELECT * FROM users WHERE username = $1 AND password = $2 AND status = $3',
+          [username, passwordHash, status]
       );
       if (result.rows.length > 0) {
-          const token = jwt.sign({ userId: result.rows[0].codper }, SECRET_KEY, { expiresIn: '2h' });
+          const token = jwt.sign({ userId: result.rows[0].id }, SECRET_KEY, { expiresIn: '2h' });
           res.status(200).json({ message: 'Login successful', token});
       } else {
           res.status(401).json({ error: 'Invalid credentials' });

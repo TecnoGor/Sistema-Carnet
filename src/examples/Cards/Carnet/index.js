@@ -326,8 +326,7 @@ function Carnet() {
       sx={({ boxShadows: { xl } }) => ({
         boxShadow: xl,
         position: "relative",
-        backgroundImage: `url(${fondoMesa})`,
-        backgroundSize: "cover",
+        backgroundImage: `url(${mesa})`,
       })}
     >
       <MDBox display="flex" zIndex={2} p={2} justifyContent="center">

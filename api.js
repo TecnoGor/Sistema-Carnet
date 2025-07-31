@@ -136,14 +136,15 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const passwordHash = hashPassword(password);
+  const status = true;
 
   try {
       const result = await pool.query(
-          'SELECT * FROM users WHERE username = $1 AND password = $2',
-          [username, passwordHash]
+          'SELECT * FROM users WHERE username = $1 AND password = $2 AND status = $3',
+          [username, passwordHash, status]
       );
       if (result.rows.length > 0) {
-          const token = jwt.sign({ userId: result.rows[0].codper }, SECRET_KEY, { expiresIn: '2h' });
+          const token = jwt.sign({ userId: result.rows[0].id }, SECRET_KEY, { expiresIn: '2h' });
           res.status(200).json({ message: 'Login successful', token});
       } else {
           res.status(401).json({ error: 'Invalid credentials' });
@@ -156,7 +157,7 @@ app.post('/login', async (req, res) => {
 // Ruta para consultar los usuarios
 app.get('/api/users', async (req, res) => {
   try {
-      const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users WHERE status = true ORDER BY id ASC');
+      const { rows } = await pool.query('SELECT id, firstname, secondname, ci, mail, phone, username, status, rol FROM users ORDER BY id ASC');
       res.json(rows);
   } catch (err) {
       console.error(err);
@@ -205,6 +206,27 @@ app.post('/api/insertUsers', async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error al guardar el usuario',
+    });
+  }
+});
+
+app.post('/api/statusUser', async (req, res) => {
+  const { id, status } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE users SET status = $2 WHERE id = $1 RETURNING *`,
+      [id, status]
+    );
+    return res.status(201).json({
+      success: true,
+      data: result.rows[0],
+      message: 'Usuario inhabilitado con éxito',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error al inhabilitar el usuario',
     });
   }
 });

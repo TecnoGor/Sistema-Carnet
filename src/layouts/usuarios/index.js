@@ -68,41 +68,79 @@ function Users() {
     fetchUsers();
   }, []);
 
-  const disabledUser = async (userId) => {
-    console.log(userId);
-    try {
-      const userData = { id: userId, status: false };
+  const changeStatusUser = async (userId) => {
+    // console.log(userId);
+    if (showActive) {
+      try {
+        const userData = { id: userId, status: false };
 
-      const response = await axios.post(`${API_Host}/api/statusUser`, userData, {
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.status === 201) {
-        Swal.fire({
-          title: "Usuario Inhabilitado!",
-          text: "El usuario ha sido deshabilitado.",
-          icon: "success",
-          draggable: true,
+        const response = await axios.post(`${API_Host}/api/statusUser`, userData, {
+          headers: { "Content-Type": "application/json" },
         });
-        fetchUsers();
+        if (response.status === 201) {
+          Swal.fire({
+            title: "Usuario Inhabilitado!",
+            text: "El usuario ha sido deshabilitado.",
+            icon: "success",
+            draggable: true,
+          });
+          fetchUsers();
+        }
+      } catch (error) {
+        if (error.response) {
+          // alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
+          Swal.fire({
+            title: "Error al inhabilitar el usuario",
+            text: `Error: ${error.response.data.message || "Error al inhabilitar usuario"}`,
+            icon: "error",
+            draggable: true,
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: `Error: ${
+              error || "Error de conexión con el servidor 🛠 , por favor intente mas tarde."
+            }`,
+            icon: "error",
+            draggable: true,
+          });
+        }
       }
-    } catch (error) {
-      if (error.response) {
-        // alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
-        Swal.fire({
-          title: "Error al inhabilitar el usuario",
-          text: `Error: ${error.response.data.message || "Error al inhabilitar usuario"}`,
-          icon: "error",
-          draggable: true,
+    } else {
+      try {
+        const userData = { id: userId, status: true };
+
+        const response = await axios.post(`${API_Host}/api/statusUser`, userData, {
+          headers: { "Content-Type": "application/json" },
         });
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: `Error: ${
-            error || "Error de conexión con el servidor 🛠 , por favor intente mas tarde."
-          }`,
-          icon: "error",
-          draggable: true,
-        });
+        if (response.status === 201) {
+          Swal.fire({
+            title: "Usuario habilitado!",
+            text: "El usuario ha sido habilitado.",
+            icon: "success",
+            draggable: true,
+          });
+          fetchUsers();
+        }
+      } catch (error) {
+        if (error.response) {
+          // alert(`Error: ${error.response.data.message || "Error al registrar usuario"}`);
+          Swal.fire({
+            title: "Error al habilitar el usuario",
+            text: `Error: ${error.response.data.message || "Error al habilitar el usuario"}`,
+            icon: "error",
+            draggable: true,
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: `Error: ${
+              error || "Error de conexión con el servidor 🛠 , por favor intente mas tarde."
+            }`,
+            icon: "error",
+            draggable: true,
+          });
+        }
       }
     }
   };
@@ -137,7 +175,12 @@ function Users() {
           <Icon>edit</Icon>&nbsp;Editar
         </MDButton>
         {showActive ? (
-          <MDButton variant="text" color="error" size="small" onClick={() => disabledUser(user.id)}>
+          <MDButton
+            variant="text"
+            color="error"
+            size="small"
+            onClick={() => changeStatusUser(user.id)}
+          >
             <Icon>delete</Icon>&nbsp;Inhabilitar
           </MDButton>
         ) : (
@@ -145,7 +188,7 @@ function Users() {
             variant="text"
             color="success"
             size="small"
-            onClick={() => disabledUser(user.id)}
+            onClick={() => changeStatusUser(user.id)}
           >
             <Icon>check</Icon>&nbsp;Habilitar
           </MDButton>
@@ -238,12 +281,22 @@ function Users() {
                         <Icon>refresh</Icon>&nbsp;Reintentar
                       </MDButton>
                     </MDBox>
-                  ) : users.length === 0 ? (
-                    <MDBox p={3} textAlign="center">
-                      <MDTypography variant="body2" color="text">
-                        No hay usuarios registrados
-                      </MDTypography>
-                    </MDBox>
+                  ) : filteredUsers.length === 0 ? (
+                    <>
+                      {showActive ? (
+                        <MDBox p={3} textAlign="center">
+                          <MDTypography variant="body2" color="text">
+                            No hay usuarios registrados activos
+                          </MDTypography>
+                        </MDBox>
+                      ) : (
+                        <MDBox p={3} textAlign="center">
+                          <MDTypography variant="body2" color="text">
+                            No hay usuarios registrados inactivos
+                          </MDTypography>
+                        </MDBox>
+                      )}
+                    </>
                   ) : (
                     <DataTable
                       table={{ columns, rows }}
