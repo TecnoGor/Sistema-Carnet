@@ -133,7 +133,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
               style={{
                 width: "2.7cm",
                 height: "2.7cm",
-                marginTop: -30,
+                marginTop: -20,
                 marginLeft: 77,
                 padding: 10,
                 borderRadius: 2,
@@ -149,7 +149,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
                     width: "100%",
                     color: "black",
                     fontWeight: "bold",
-                    marginTop: -20,
+                    marginTop: -10,
                     marginLeft: 55,
                     textAlign: "center",
                     fontSize: 10,
@@ -164,7 +164,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
                     width: "100%",
                     color: "black",
                     fontWeight: "bold",
-                    marginTop: -1,
+                    marginTop: -15,
                     marginLeft: 102,
                     fontSize: 12,
                   }}
@@ -177,7 +177,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
                     color: "black",
                     fontWeight: "bold",
                     padding: 4,
-                    marginTop: 0,
+                    marginTop: -15,
                     marginLeft: 33,
                     textAlign: "center",
                     background: "#888",
@@ -204,7 +204,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
             alt="QREmpleado"
             style={{
               width: "3cm",
-              marginTop: 15,
+              marginTop: 8,
             }}
           >
             {empleado && <CarnetQR empleadoId={empleado.cedper}></CarnetQR>}
@@ -243,13 +243,15 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
         }}
       >
         <div style={{ zIndex: 20 }}>
-          <p>1. Este carnet es de uso personal e intransferible, no implica autoridad alguna.</p>
-          <p>2. Debe portarse en un lugar visible.</p>
-          <p>
+          <p style={{ margin: 0 }}>
+            1. Este carnet es de uso personal e intransferible, no implica autoridad alguna.
+          </p>
+          <p style={{ margin: 0 }}>2. Debe portarse en un lugar visible.</p>
+          <p style={{ margin: 0 }}>
             3. La institución no se hace responsable de las acciones ejecutadas por el portador de
             esta identificación. Solo responde de las acciones en el desempeño de sus funciones.
           </p>
-          <p>
+          <p style={{ margin: 0 }}>
             4. Esta identificación es de IPOSTEL y debe ser entregado a la Dirección de Seguridad
             Postal al finalizar la relación laboral.
           </p>
@@ -262,7 +264,7 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
             style={{
               position: "absolute",
               width: "3.5cm",
-              marginTop: -20,
+              marginTop: -50,
               marginLeft: 25,
               zIndex: 10,
             }}
@@ -273,15 +275,15 @@ const CarnetImprimible = React.forwardRef(({ empleado, foto, colorger }, ref) =>
             style={{
               position: "absolute",
               width: "3.5cm",
-              marginTop: -20,
+              marginTop: -50,
               marginLeft: 25,
               zIndex: 1,
             }}
           />
         </div>
-        <div style={{ textAlign: "center", marginTop: 90, zIndex: 20 }}>
-          <p> Centro Postal de Caracas </p>
-          <p> Caracas - Venezuela. Zp. 1020 </p>
+        <div style={{ textAlign: "center", marginTop: 60, zIndex: 20 }}>
+          <p style={{ margin: 0 }}> Centro Postal de Caracas </p>
+          <p style={{ margin: 0 }}> Caracas - Venezuela. Zp. 1020 </p>
         </div>
       </div>
     </div>
